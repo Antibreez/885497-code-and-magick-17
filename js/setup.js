@@ -46,18 +46,26 @@ var getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-var heroesNumber = 4;
-var heroes = [];
+var getRandomBool = function () {
+  return Math.round() < 0.5;
+};
 
-for (var i = 0; i < heroesNumber; i++) {
-  heroes[i] = {};
-  heroes[i].name = (Math.floor(Math.random() * 2) === 0)
-    ? (getRandomItem(HERO_NAMES) + ' ' + getRandomItem(HERO_SURNAMES))
-    : (getRandomItem(HERO_SURNAMES) + ' ' + getRandomItem(HERO_NAMES));
-
-  heroes[i].coatColor = getRandomItem(COAT_COLORS);
-  heroes[i].eyesColor = getRandomItem(EYE_COLORS);
+var getRandomName = function () {
+  return (getRandomBool() ? [HERO_NAMES, HERO_SURNAMES] : [HERO_SURNAMES, HERO_NAMES])
+    .map(getRandomItem)
+    .join(' ');
 }
+
+var makeHero = function () {
+  return {
+    name: getRandomName(),
+    coatColor: getRandomItem(COAT_COLORS),
+    eyesColor: getRandomItem(EYE_COLORS)
+  }
+}
+
+var heroesNumber = 4;
+var heroes = Array(heroesNumber).fill(null).map(makeHero);
 
 var heroesList = document.querySelector('.setup-similar-list');
 var heroTemplate = document.querySelector('#similar-wizard-template')
@@ -73,15 +81,15 @@ var renderHero = function (hero) {
   return heroItem;
 };
 
-var addHeroes = function (array, target) {
+var addHeroes = function (target, heroes) {
   var fragment = document.createDocumentFragment();
-  array.forEach(function (element) {
+  heroes.forEach(function (element) {
     fragment.appendChild(renderHero(element));
   });
 
   target.appendChild(fragment);
 };
 
-addHeroes(heroes, heroesList);
+addHeroes(heroesList, heroes);
 
 setupWindow.querySelector('.setup-similar').classList.remove('hidden');
