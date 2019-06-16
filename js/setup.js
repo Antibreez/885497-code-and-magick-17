@@ -1,9 +1,6 @@
 'use strict';
 
-var setupWindow = document.querySelector('.setup');
-setupWindow.classList.remove('hidden');
-
-var HERO_NAMES = [
+var NAMES = [
   'Иван',
   'Хуан Себастьян',
   'Мария',
@@ -14,7 +11,7 @@ var HERO_NAMES = [
   'Вашингтон'
 ];
 
-var HERO_SURNAMES = [
+var SURNAMES = [
   'да Марья',
   'Верон',
   'Мирабелла',
@@ -42,22 +39,48 @@ var EYE_COLORS = [
   'green'
 ];
 
+var FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
+var HEROES_NUM = 4;
+
+var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setup.querySelector('.setup-close');
+var setupUserName = setup.querySelector('.setup-user-name');
+var setupCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
+var setupEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
+var setupFireballColor = setup.querySelector('.setup-fireball-wrap');
+var coatColorInput = setup.querySelector('input[name=coat-color]');
+var eyesColorInput = setup.querySelector('input[name=eyes-color]');
+var fireballColorInput = setup.querySelector('input[name=fireball-color]');
+
 var getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-var heroesNumber = 4;
-var heroes = [];
+var getRandomBool = function () {
+  return Math.round() < 0.5;
+};
 
-for (var i = 0; i < heroesNumber; i++) {
-  heroes[i] = {};
-  heroes[i].name = (Math.floor(Math.random() * 2) === 0)
-    ? (getRandomItem(HERO_NAMES) + ' ' + getRandomItem(HERO_SURNAMES))
-    : (getRandomItem(HERO_SURNAMES) + ' ' + getRandomItem(HERO_NAMES));
+var getRandomName = function () {
+  return (getRandomBool() ? [NAMES, SURNAMES] : [SURNAMES, NAMES])
+    .map(getRandomItem)
+    .join(' ');
+};
 
-  heroes[i].coatColor = getRandomItem(COAT_COLORS);
-  heroes[i].eyesColor = getRandomItem(EYE_COLORS);
-}
+var makeHero = function () {
+  return {
+    name: getRandomName(),
+    coatColor: getRandomItem(COAT_COLORS),
+    eyesColor: getRandomItem(EYE_COLORS)
+  };
+};
 
 var heroesList = document.querySelector('.setup-similar-list');
 var heroTemplate = document.querySelector('#similar-wizard-template')
@@ -73,15 +96,104 @@ var renderHero = function (hero) {
   return heroItem;
 };
 
-var addHeroes = function (array, target) {
+var addHeroes = function (target, heroes) {
   var fragment = document.createDocumentFragment();
-  array.forEach(function (element) {
-    fragment.appendChild(renderHero(element));
+  heroes.forEach(function (hero) {
+    fragment.appendChild(renderHero(hero));
   });
 
   target.appendChild(fragment);
 };
 
-addHeroes(heroes, heroesList);
+var getHeroes = function (num) {
+  return Array(num).fill(null).map(makeHero);
+};
 
-setupWindow.querySelector('.setup-similar').classList.remove('hidden');
+var showElement = function (element) {
+  element.classList.remove('hidden');
+};
+
+var hideElement = function (element) {
+  element.classList.add('hidden');
+};
+
+var onEscPress = function (evt) {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  showElement(setup);
+  document.addEventListener('keydown', onEscPress);
+};
+
+var closePopup = function () {
+  hideElement(setup);
+  document.removeEventListener('keydown', onEscPress);
+};
+
+var onPopupOpenClick = function () {
+  openPopup();
+};
+
+var onPopupOpenPress = function (evt) {
+  if (evt.key === 'Enter') {
+    openPopup();
+  }
+};
+
+var onPopupCloseClick = function () {
+  closePopup();
+};
+
+var onPopupClosePress = function (evt) {
+  if (evt.key === 'Enter') {
+    closePopup();
+  }
+};
+
+setupOpen.addEventListener('click', onPopupOpenClick);
+setupOpen.addEventListener('keydown', onPopupOpenPress);
+
+setupClose.addEventListener('click', onPopupCloseClick);
+setupClose.addEventListener('keydown', onPopupClosePress);
+
+setupUserName.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onEscPress);
+});
+
+setupUserName.addEventListener('blur', function () {
+  document.addEventListener('keydown', onEscPress);
+});
+
+var excludeValue = function (array, value) {
+  return array.filter(function (it) {
+    return it !== value;
+  });
+};
+
+setupCoatColor.addEventListener('click', function (evt) {
+  var colors = excludeValue(COAT_COLORS, evt.target.style.fill);
+  var color = getRandomItem(colors);
+  setupCoatColor.style.fill = color;
+  coatColorInput.value = color;
+});
+
+setupEyesColor.addEventListener('click', function (evt) {
+  var colors = excludeValue(EYE_COLORS, evt.target.style.fill);
+  var color = getRandomItem(colors);
+  setupEyesColor.style.fill = color;
+  eyesColorInput.value = color;
+});
+
+setupFireballColor.addEventListener('click', function (evt) {
+  var colors = excludeValue(FIREBALL_COLORS, evt.target.style.fill);
+  var color = getRandomItem(colors);
+  setupFireballColor.style.backgroundColor = color;
+  fireballColorInput.value = color;
+});
+
+addHeroes(heroesList, getHeroes(HEROES_NUM));
+
+showElement(document.querySelector('.setup-similar'));
