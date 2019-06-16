@@ -47,6 +47,19 @@ var FIREBALL_COLORS = [
   '#e6e848'
 ];
 
+var HEROES_NUM = 4;
+
+var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setup.querySelector('.setup-close');
+var setupUserName = setup.querySelector('.setup-user-name');
+var setupCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
+var setupEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
+var setupFireballColor = setup.querySelector('.setup-fireball-wrap');
+var coatColorInput = setup.querySelector('input[name=coat-color]');
+var eyesColorInput = setup.querySelector('input[name=eyes-color]');
+var fireballColorInput = setup.querySelector('input[name=fireball-color]');
+
 var getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -68,8 +81,6 @@ var makeHero = function () {
     eyesColor: getRandomItem(EYE_COLORS)
   };
 };
-
-var HEROES_NUM = 4;
 
 var heroesList = document.querySelector('.setup-similar-list');
 var heroTemplate = document.querySelector('#similar-wizard-template')
@@ -98,40 +109,27 @@ var getHeroes = function (num) {
   return Array(num).fill(null).map(makeHero);
 };
 
-addHeroes(heroesList, getHeroes(HEROES_NUM));
-
 var showElement = function (element) {
   element.classList.remove('hidden');
 };
 
-showElement(document.querySelector('.setup-similar'));
-
-var Keys = {
-  ESC: 27,
-  ENTER: 13
+var hideElement = function (element) {
+  element.classList.add('hidden');
 };
 
-var setup = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = setup.querySelector('.setup-close');
-var setupUserName = setup.querySelector('.setup-user-name');
-var setupCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
-var setupEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
-var setupFireballColor = setup.querySelector('.setup-fireball-wrap');
-
 var onEscPress = function (evt) {
-  if (evt.keyCode === Keys.ESC) {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
     closePopup();
   }
 };
 
 var openPopup = function () {
-  setup.classList.remove('hidden');
+  showElement(setup);
   document.addEventListener('keydown', onEscPress);
 };
 
 var closePopup = function () {
-  setup.classList.add('hidden');
+  hideElement(setup);
   document.removeEventListener('keydown', onEscPress);
 };
 
@@ -140,7 +138,7 @@ var onPopupOpenClick = function () {
 };
 
 var onPopupOpenPress = function (evt) {
-  if (evt.keyCode === Keys.ENTER) {
+  if (evt.key === 'Enter') {
     openPopup();
   }
 };
@@ -150,7 +148,7 @@ var onPopupCloseClick = function () {
 };
 
 var onPopupClosePress = function (evt) {
-  if (evt.keyCode === Keys.ENTER) {
+  if (evt.key === 'Enter') {
     closePopup();
   }
 };
@@ -169,20 +167,33 @@ setupUserName.addEventListener('blur', function () {
   document.addEventListener('keydown', onEscPress);
 });
 
-setupCoatColor.addEventListener('click', function () {
-  var color = getRandomItem(COAT_COLORS);
+var excludeValue = function (array, value) {
+  return array.filter(function (it) {
+    return it !== value;
+  });
+};
+
+setupCoatColor.addEventListener('click', function (evt) {
+  var colors = excludeValue(COAT_COLORS, evt.target.style.fill);
+  var color = getRandomItem(colors);
   setupCoatColor.style.fill = color;
-  setup.querySelector('input[name=coat-color]').value = color;
+  coatColorInput.value = color;
 });
 
-setupEyesColor.addEventListener('click', function () {
-  var color = getRandomItem(EYE_COLORS);
+setupEyesColor.addEventListener('click', function (evt) {
+  var colors = excludeValue(EYE_COLORS, evt.target.style.fill);
+  var color = getRandomItem(colors);
   setupEyesColor.style.fill = color;
-  setup.querySelector('input[name=eyes-color').value = color;
+  eyesColorInput.value = color;
 });
 
-setupFireballColor.addEventListener('click', function () {
-  var color = getRandomItem(FIREBALL_COLORS);
+setupFireballColor.addEventListener('click', function (evt) {
+  var colors = excludeValue(FIREBALL_COLORS, evt.target.style.fill);
+  var color = getRandomItem(colors);
   setupFireballColor.style.backgroundColor = color;
-  setup.querySelector('input[name=fireball-color]').value = color;
+  fireballColorInput.value = color;
 });
+
+addHeroes(heroesList, getHeroes(HEROES_NUM));
+
+showElement(document.querySelector('.setup-similar'));
