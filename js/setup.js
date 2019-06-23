@@ -50,15 +50,20 @@ var FIREBALL_COLORS = [
 var HEROES_NUM = 4;
 
 var setup = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = setup.querySelector('.setup-close');
-var setupUserName = setup.querySelector('.setup-user-name');
 var setupCoatColor = setup.querySelector('.setup-wizard .wizard-coat');
 var setupEyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
 var setupFireballColor = setup.querySelector('.setup-fireball-wrap');
 var coatColorInput = setup.querySelector('input[name=coat-color]');
 var eyesColorInput = setup.querySelector('input[name=eyes-color]');
 var fireballColorInput = setup.querySelector('input[name=fireball-color]');
+
+var showElement = function (element) {
+  element.classList.remove('hidden');
+};
+
+var hideElement = function (element) {
+  element.classList.add('hidden');
+};
 
 var getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -108,64 +113,6 @@ var addHeroes = function (target, heroes) {
 var getHeroes = function (num) {
   return Array(num).fill(null).map(makeHero);
 };
-
-var showElement = function (element) {
-  element.classList.remove('hidden');
-};
-
-var hideElement = function (element) {
-  element.classList.add('hidden');
-};
-
-var onEscPress = function (evt) {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
-    closePopup();
-  }
-};
-
-var openPopup = function () {
-  showElement(setup);
-  document.addEventListener('keydown', onEscPress);
-};
-
-var closePopup = function () {
-  hideElement(setup);
-  document.removeEventListener('keydown', onEscPress);
-};
-
-var onPopupOpenClick = function () {
-  openPopup();
-};
-
-var onPopupOpenPress = function (evt) {
-  if (evt.key === 'Enter') {
-    openPopup();
-  }
-};
-
-var onPopupCloseClick = function () {
-  closePopup();
-};
-
-var onPopupClosePress = function (evt) {
-  if (evt.key === 'Enter') {
-    closePopup();
-  }
-};
-
-setupOpen.addEventListener('click', onPopupOpenClick);
-setupOpen.addEventListener('keydown', onPopupOpenPress);
-
-setupClose.addEventListener('click', onPopupCloseClick);
-setupClose.addEventListener('keydown', onPopupClosePress);
-
-setupUserName.addEventListener('focus', function () {
-  document.removeEventListener('keydown', onEscPress);
-});
-
-setupUserName.addEventListener('blur', function () {
-  document.addEventListener('keydown', onEscPress);
-});
 
 var excludeValue = function (array, value) {
   return array.filter(function (it) {
