@@ -4,7 +4,6 @@
   var artifactShop = document.querySelector('.setup-artifacts-shop');
   var artifactShopImages = artifactShop.querySelectorAll('img');
   var artifactBag = document.querySelector('.setup-artifacts');
-  var artifactBagElements = artifactBag.querySelectorAll('.setup-artifacts-cell');
 
   var artifactHandle = function (image) {
     image.addEventListener('mousedown', function (evt) {

@@ -44,7 +44,7 @@
         counter = max > counter ? counter + 1 : 0;
         return counter;
       },
-   };
+    };
   };
 
   var makeColorize = function (colors) {
