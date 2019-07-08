@@ -59,9 +59,9 @@
 
     text.split('\n').forEach(function (line, i) {
       ctx.fillText(
-        line,
-        CloudTitle.X,
-        CloudTitle.Y + Text.LINE_HEIGHT * i
+          line,
+          CloudTitle.X,
+          CloudTitle.Y + Text.LINE_HEIGHT * i
       );
     });
   };

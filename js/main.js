@@ -20,7 +20,7 @@
   setupOpen.addEventListener('click', onSetupOpenClick);
   setupOpen.addEventListener('keydown', onSetupClosePress);
 })(window.DOM,
-  window.Setup,
-  window.backend,
-  window.errorMessage
+    window.Setup,
+    window.backend,
+    window.errorMessage
 );

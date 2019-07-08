@@ -12,8 +12,8 @@
 
         if (onMove) {
           onMove(
-            start.x - moveEvt.clientX,
-            start.y - moveEvt.clientY,
+              start.x - moveEvt.clientX,
+              start.y - moveEvt.clientY
           );
         }
 
@@ -29,7 +29,7 @@
       };
 
       document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp, { once: true });
+      document.addEventListener('mouseup', onMouseUp, {once: true});
     };
   };
 
@@ -43,8 +43,8 @@
         element.classList.add('hidden');
       },
 
-      removeChilds: function (element){
-        while (element.firstChild){
+      removeChilds: function (element) {
+        while (element.firstChild) {
           element.removeChild(element.firstChild);
         }
       },

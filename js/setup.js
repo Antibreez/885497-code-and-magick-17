@@ -23,8 +23,6 @@
   var eyesColor = setup.querySelector('.setup-wizard .wizard-eyes');
   var fireballColor = setup.querySelector('.setup-fireball-wrap');
 
-  var Colorize = Colorize.make(Data.Color);
-
   var renderHero = function (hero) {
     var node = heroTemplate.cloneNode(true);
     node.querySelector('.setup-similar-label').textContent = hero.name;
@@ -56,7 +54,7 @@
   var onUploadMouseUp = function () {
     setupUpload.addEventListener('click', function (evt) {
       evt.preventDefault();
-    }, { once: true });
+    }, {once: true});
   };
 
   var Setup = function () {
@@ -104,19 +102,19 @@
   };
 
   Setup.prototype._onMouseDown = makeOnMouseDown(
-    onUploadMouseMove,
-    onUploadMouseUp,
+      onUploadMouseMove,
+      onUploadMouseUp
   );
 
   Setup.prototype._onSubmit = function (evt) {
     backend.save(
-      new FormData(form),
+        new FormData(form),
 
-      function (response) {
-        DOM.Element.hide(setup);
-      },
+        function () {
+          DOM.Element.hide(setup);
+        },
 
-      errorMessage
+        errorMessage
     );
     evt.preventDefault();
   };
@@ -147,8 +145,8 @@
 
   window.Setup = Setup;
 })(window.DOM,
-  window.Data,
-  window.Colorize,
-  window.backend,
-  window.errorMessage
+    window.Data,
+    window.Colorize,
+    window.backend,
+    window.errorMessage
 );

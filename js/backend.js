@@ -51,5 +51,5 @@
       req.open(Method.POST, Url.POST);
       req.send(data);
     }
-  }
+  };
 })();
